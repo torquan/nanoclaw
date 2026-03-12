@@ -7,6 +7,7 @@ import { DATA_DIR, IPC_POLL_INTERVAL, TIMEZONE } from './config.js';
 import { AvailableGroup } from './container-runner.js';
 import { createTask, deleteTask, getTaskById, updateTask } from './db.js';
 import { isValidGroupFolder } from './group-folder.js';
+import { executeHostCommand } from './host-commands.js';
 import { logger } from './logger.js';
 import { RegisteredGroup } from './types.js';
 
@@ -164,6 +165,10 @@ export async function processTaskIpc(
     groupFolder?: string;
     chatJid?: string;
     targetJid?: string;
+    // For host_command
+    commandId?: string;
+    action?: string;
+    requestId?: string;
     // For register_group
     jid?: string;
     name?: string;
@@ -445,6 +450,24 @@ export async function processTaskIpc(
         logger.warn(
           { data },
           'Invalid register_group request - missing required fields',
+        );
+      }
+      break;
+
+    case 'host_command':
+      if (data.commandId && data.action && data.requestId) {
+        executeHostCommand(
+          {
+            commandId: data.commandId as string,
+            action: data.action as string,
+            requestId: data.requestId as string,
+          },
+          sourceGroup,
+        );
+      } else {
+        logger.warn(
+          { data, sourceGroup },
+          'Invalid host_command request - missing required fields',
         );
       }
       break;
