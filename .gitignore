@@ -9,14 +9,12 @@ store/
 data/
 logs/
 
-# Groups - only track base structure and specific CLAUDE.md files
-groups/*
-!groups/main/
-!groups/global/
-groups/main/*
-groups/global/*
-!groups/main/CLAUDE.md
-!groups/global/CLAUDE.md
+# Groups - track all group configs (CLAUDE.md, SOUL.md, etc.)
+# Exclude runtime artifacts
+groups/*/logs/
+groups/*/conversations/
+groups/*/auth-state.json
+groups/*/*.png
 
 # Secrets
 *.keys.json
