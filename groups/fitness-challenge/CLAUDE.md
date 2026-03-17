@@ -105,8 +105,8 @@ curl -s -X POST "$COOLIFY_API_URL/applications/public" \
 
 ## Participants
 
-- **Luis** — phone: will be set after WhatsApp group creation
-- **Miley** — phone: will be set after WhatsApp group creation. Specific goal: learn spagat (front splits).
+- **Luis** — Height: 189cm, male. *Beginner* with fitness. Protein target: ~140g/day (1.6g × 87.4kg).
+- **Miley** — Height: 160cm, female, Asian. *Experienced athlete (~10 years training)*. Specific goal: learn spagat (front splits). Her InBody values are healthy for her body type — ignore "critically low" flags (app was misconfigured for male/tall profile). Protein target: ~80g/day (1.6g × 50.4kg).
 
 ## Challenge Details
 

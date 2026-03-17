@@ -333,6 +333,70 @@ Use available_groups.json to find the JID for a group. The folder name must be c
   },
 );
 
+server.tool(
+  'host_command',
+  `Execute a pre-configured command on the host machine. Commands are defined by the user in the host's config and cannot be modified from the container. Use this for operations that require host-level access (git push, database backups, etc.).
+
+Read /workspace/ipc/host_commands.json to see available commands for this group.
+
+Actions:
+• "start" — Run the command
+• "stop" — Stop a long-running command
+• "status" — Check if a long-running command is running`,
+  {
+    command_id: z.string().describe('The command identifier (e.g., "fitness-git-push")'),
+    action: z.enum(['start', 'stop', 'status']).describe('Action to perform'),
+  },
+  async (args) => {
+    const requestId = `hc-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+
+    const data = {
+      type: 'host_command',
+      commandId: args.command_id,
+      action: args.action,
+      requestId,
+      groupFolder,
+      timestamp: new Date().toISOString(),
+    };
+
+    writeIpcFile(TASKS_DIR, data);
+
+    // Poll for the result file written by the host
+    const resultsDir = path.join(IPC_DIR, 'host_command_results');
+    const resultFile = path.join(resultsDir, `${requestId}.json`);
+    const maxWait = 60_000;
+    const pollMs = 300;
+    const start = Date.now();
+
+    while (Date.now() - start < maxWait) {
+      if (fs.existsSync(resultFile)) {
+        try {
+          const result = JSON.parse(fs.readFileSync(resultFile, 'utf-8'));
+          fs.unlinkSync(resultFile);
+          const text = result.output
+            ? `${result.message}\n\n${result.output}`
+            : result.message;
+          return {
+            content: [{ type: 'text' as const, text }],
+            isError: result.status === 'error',
+          };
+        } catch (err) {
+          return {
+            content: [{ type: 'text' as const, text: `Failed to parse result: ${err instanceof Error ? err.message : String(err)}` }],
+            isError: true,
+          };
+        }
+      }
+      await new Promise(r => setTimeout(r, pollMs));
+    }
+
+    return {
+      content: [{ type: 'text' as const, text: `Timed out waiting for host command result (${maxWait / 1000}s). The command may still be running on the host.` }],
+      isError: true,
+    };
+  },
+);
+
 // Start the stdio transport
 const transport = new StdioServerTransport();
 await server.connect(transport);

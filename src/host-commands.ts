@@ -43,7 +43,10 @@ const runningProcesses = new Map<
 function loadConfig(): HostCommandsFile | null {
   try {
     if (!fs.existsSync(HOST_COMMANDS_CONFIG_PATH)) {
-      logger.warn('Host commands config not found at %s', HOST_COMMANDS_CONFIG_PATH);
+      logger.warn(
+        'Host commands config not found at %s',
+        HOST_COMMANDS_CONFIG_PATH,
+      );
       return null;
     }
     return JSON.parse(fs.readFileSync(HOST_COMMANDS_CONFIG_PATH, 'utf-8'));
@@ -74,12 +77,7 @@ function writeResult(
 
 function getLogFile(sourceGroup: string, commandId: string): string {
   assertValidGroupFolder(sourceGroup);
-  const logsDir = path.join(
-    DATA_DIR,
-    'ipc',
-    sourceGroup,
-    'host_command_logs',
-  );
+  const logsDir = path.join(DATA_DIR, 'ipc', sourceGroup, 'host_command_logs');
   fs.mkdirSync(logsDir, { recursive: true });
   return path.join(logsDir, `${commandId}.log`);
 }

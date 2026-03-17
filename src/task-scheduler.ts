@@ -8,6 +8,7 @@ import {
   runContainerAgent,
   writeTasksSnapshot,
 } from './container-runner.js';
+import { syncHostCommandsToGroup } from './host-commands.js';
 import {
   getAllTasks,
   getDueTasks,
@@ -145,6 +146,9 @@ async function runTask(
       next_run: t.next_run,
     })),
   );
+
+  // Sync available host commands so scheduled task agents can use them
+  syncHostCommandsToGroup(task.group_folder);
 
   let result: string | null = null;
   let error: string | null = null;
