@@ -301,7 +301,10 @@ export class WhatsAppChannel implements Channel {
         : undefined;
 
     if (!this.connected) {
-      logger.warn({ jid }, 'WA disconnected, cannot send media (no queue support for media yet)');
+      logger.warn(
+        { jid },
+        'WA disconnected, cannot send media (no queue support for media yet)',
+      );
       return;
     }
 
@@ -325,7 +328,10 @@ export class WhatsAppChannel implements Channel {
         'Media sent',
       );
     } catch (err) {
-      logger.error({ jid, err, mimetype: media.mimetype }, 'Failed to send media');
+      logger.error(
+        { jid, err, mimetype: media.mimetype },
+        'Failed to send media',
+      );
       throw err;
     }
   }
