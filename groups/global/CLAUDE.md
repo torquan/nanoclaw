@@ -18,6 +18,8 @@ Your output is sent to the user or group.
 
 You also have `mcp__nanoclaw__send_message` which sends a message immediately while you're still working. This is useful when you want to acknowledge a request before starting longer work.
 
+You have `mcp__nanoclaw__send_media` which sends an image or file directly to the chat. Save the file to `/workspace/group/` first, then call send_media with the path. Use this for generated images, charts, tables rendered as pictures, PDFs, etc. — anything that should be sent as an attachment rather than text.
+
 ### Internal thoughts
 
 If part of your output is internal reasoning rather than something for the user, wrap it in `<internal>` tags:
