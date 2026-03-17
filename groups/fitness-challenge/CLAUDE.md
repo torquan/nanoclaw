@@ -8,19 +8,20 @@ Your workspace is at `/workspace/extra/fitness-challenge`.
 
 ## Critical Rules
 
-- Prisma runs INSIDE the container. Always override the DATABASE_URL for container networking:
+- The `.env` file contains `DATABASE_URL` for the remote Coolify-hosted PostgreSQL. Always source it before Prisma/DB commands:
   ```bash
-  DATABASE_URL=postgresql://luis@host.docker.internal:5432/fitness_challenge npx prisma db push
-  DATABASE_URL=postgresql://luis@host.docker.internal:5432/fitness_challenge npx prisma generate
+  source /workspace/extra/fitness-challenge/.env
+  npx prisma db push
+  npx prisma generate
   ```
-- All Prisma/DB commands must use the `DATABASE_URL=postgresql://luis@host.docker.internal:5432/fitness_challenge` prefix.
+- All Prisma/DB commands must be run after sourcing `.env` (which sets `DATABASE_URL`).
 - Git commits happen inside the container. Configure git first:
   ```bash
   git config user.name "NanoClaw Agent"
   git config user.email "agent@example.com"
   ```
 - Git push MUST go through the host command: `host_command(command_id="fitness-git-push", action="start")`
-- The `.env` file in the workspace contains Coolify credentials. Use `source /workspace/extra/fitness-challenge/.env` before Coolify API calls.
+- The `.env` file in the workspace contains `DATABASE_URL` and Coolify credentials. Use `source /workspace/extra/fitness-challenge/.env` before any DB or Coolify API calls.
 - Read and edit files directly at `/workspace/extra/fitness-challenge`. Use `cd /workspace/extra/fitness-challenge` as your working directory.
 
 ## Host Commands
@@ -47,7 +48,8 @@ Query the database using Prisma from inside the container. The schema is at `/wo
 
 ```bash
 cd /workspace/extra/fitness-challenge
-DATABASE_URL=postgresql://luis@host.docker.internal:5432/fitness_challenge npx prisma studio
+source .env
+npx prisma studio
 ```
 
 ### Using Prisma programmatically
@@ -55,7 +57,8 @@ DATABASE_URL=postgresql://luis@host.docker.internal:5432/fitness_challenge npx p
 Create a quick Node.js script to query:
 ```bash
 cd /workspace/extra/fitness-challenge
-DATABASE_URL=postgresql://luis@host.docker.internal:5432/fitness_challenge node -e "
+source .env
+node -e "
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 prisma.user.findMany().then(u => { console.log(JSON.stringify(u, null, 2)); prisma.\$disconnect(); });
@@ -67,8 +70,9 @@ prisma.user.findMany().then(u => { console.log(JSON.stringify(u, null, 2)); pris
 After editing `prisma/schema.prisma`:
 ```bash
 cd /workspace/extra/fitness-challenge
-DATABASE_URL=postgresql://luis@host.docker.internal:5432/fitness_challenge npx prisma db push
-DATABASE_URL=postgresql://luis@host.docker.internal:5432/fitness_challenge npx prisma generate
+source .env
+npx prisma db push
+npx prisma generate
 ```
 
 ## Coolify Deployment
