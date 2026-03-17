@@ -3,16 +3,17 @@ import path from 'path';
 
 import { CronExpressionParser } from 'cron-parser';
 
-import { DATA_DIR, IPC_POLL_INTERVAL, TIMEZONE } from './config.js';
+import { DATA_DIR, GROUPS_DIR, IPC_POLL_INTERVAL, TIMEZONE } from './config.js';
 import { AvailableGroup } from './container-runner.js';
 import { createTask, deleteTask, getTaskById, updateTask } from './db.js';
 import { isValidGroupFolder } from './group-folder.js';
 import { executeHostCommand } from './host-commands.js';
 import { logger } from './logger.js';
-import { RegisteredGroup } from './types.js';
+import { MediaPayload, RegisteredGroup } from './types.js';
 
 export interface IpcDeps {
   sendMessage: (jid: string, text: string) => Promise<void>;
+  sendMedia: (jid: string, media: MediaPayload) => Promise<void>;
   registeredGroups: () => Record<string, RegisteredGroup>;
   registerGroup: (jid: string, group: RegisteredGroup) => void;
   syncGroups: (force: boolean) => Promise<void>;
@@ -90,6 +91,51 @@ export function startIpcWatcher(deps: IpcDeps): void {
                   logger.warn(
                     { chatJid: data.chatJid, sourceGroup },
                     'Unauthorized IPC message attempt blocked',
+                  );
+                }
+              } else if (
+                data.type === 'media' &&
+                data.chatJid &&
+                data.filePath
+              ) {
+                const targetGroup = registeredGroups[data.chatJid];
+                if (
+                  isMain ||
+                  (targetGroup && targetGroup.folder === sourceGroup)
+                ) {
+                  // Resolve container path to host path
+                  // Container sees /workspace/group/... → host has groups/{folder}/...
+                  const relativePath = (data.filePath as string).replace(
+                    /^\/workspace\/group\//,
+                    '',
+                  );
+                  const hostPath = path.join(
+                    GROUPS_DIR,
+                    sourceGroup,
+                    relativePath,
+                  );
+
+                  if (!fs.existsSync(hostPath)) {
+                    logger.error(
+                      { hostPath, sourceGroup },
+                      'IPC media file not found',
+                    );
+                  } else {
+                    await deps.sendMedia(data.chatJid, {
+                      filePath: hostPath,
+                      mimetype: (data.mimetype as string) || 'image/png',
+                      caption: data.caption as string | undefined,
+                      fileName: data.fileName as string | undefined,
+                    });
+                    logger.info(
+                      { chatJid: data.chatJid, sourceGroup, hostPath },
+                      'IPC media sent',
+                    );
+                  }
+                } else {
+                  logger.warn(
+                    { chatJid: data.chatJid, sourceGroup },
+                    'Unauthorized IPC media attempt blocked',
                   );
                 }
               }

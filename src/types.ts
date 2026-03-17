@@ -79,6 +79,17 @@ export interface TaskRunLog {
 
 // --- Channel abstraction ---
 
+export interface MediaPayload {
+  /** Absolute path to the media file on the host */
+  filePath: string;
+  /** MIME type (e.g., "image/png", "image/jpeg", "application/pdf") */
+  mimetype: string;
+  /** Optional caption to display with the media */
+  caption?: string;
+  /** Optional filename for document-type sends */
+  fileName?: string;
+}
+
 export interface Channel {
   name: string;
   connect(): Promise<void>;
@@ -90,6 +101,8 @@ export interface Channel {
   setTyping?(jid: string, isTyping: boolean): Promise<void>;
   // Optional: sync group/chat names from the platform.
   syncGroups?(force: boolean): Promise<void>;
+  // Optional: send media (images, documents). Channels that support it implement it.
+  sendMedia?(jid: string, media: MediaPayload): Promise<void>;
 }
 
 // Callback type that channels use to deliver inbound messages

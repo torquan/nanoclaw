@@ -24,6 +24,7 @@ import { isImageMessage, processImage } from '../image.js';
 import { logger } from '../logger.js';
 import {
   Channel,
+  MediaPayload,
   OnInboundMessage,
   OnChatMetadata,
   RegisteredGroup,
@@ -287,6 +288,45 @@ export class WhatsAppChannel implements Channel {
         { jid, err, queueSize: this.outgoingQueue.length },
         'Failed to send, message queued',
       );
+    }
+  }
+
+  async sendMedia(jid: string, media: MediaPayload): Promise<void> {
+    const buffer = fs.readFileSync(media.filePath);
+    const isImage = media.mimetype.startsWith('image/');
+    const caption = ASSISTANT_HAS_OWN_NUMBER
+      ? media.caption || undefined
+      : media.caption
+        ? `${ASSISTANT_NAME}: ${media.caption}`
+        : undefined;
+
+    if (!this.connected) {
+      logger.warn({ jid }, 'WA disconnected, cannot send media (no queue support for media yet)');
+      return;
+    }
+
+    try {
+      if (isImage) {
+        await this.sock.sendMessage(jid, {
+          image: buffer,
+          caption,
+          mimetype: media.mimetype,
+        });
+      } else {
+        await this.sock.sendMessage(jid, {
+          document: buffer,
+          caption,
+          mimetype: media.mimetype,
+          fileName: media.fileName || path.basename(media.filePath),
+        });
+      }
+      logger.info(
+        { jid, mimetype: media.mimetype, size: buffer.length },
+        'Media sent',
+      );
+    } catch (err) {
+      logger.error({ jid, err, mimetype: media.mimetype }, 'Failed to send media');
+      throw err;
     }
   }
 
