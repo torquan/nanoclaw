@@ -191,8 +191,24 @@ function buildVolumeMounts(
     group.folder,
     'agent-runner-src',
   );
-  if (!fs.existsSync(groupAgentRunnerDir) && fs.existsSync(agentRunnerSrc)) {
-    fs.cpSync(agentRunnerSrc, groupAgentRunnerDir, { recursive: true });
+  if (fs.existsSync(agentRunnerSrc)) {
+    if (!fs.existsSync(groupAgentRunnerDir)) {
+      fs.cpSync(agentRunnerSrc, groupAgentRunnerDir, { recursive: true });
+    } else {
+      // Sync updated source files (e.g., after container rebuild adds new tools)
+      for (const file of fs.readdirSync(agentRunnerSrc)) {
+        const srcFile = path.join(agentRunnerSrc, file);
+        const destFile = path.join(groupAgentRunnerDir, file);
+        const srcStat = fs.statSync(srcFile);
+        if (
+          srcStat.isFile() &&
+          (!fs.existsSync(destFile) ||
+            srcStat.mtimeMs > fs.statSync(destFile).mtimeMs)
+        ) {
+          fs.copyFileSync(srcFile, destFile);
+        }
+      }
+    }
   }
   mounts.push({
     hostPath: groupAgentRunnerDir,
