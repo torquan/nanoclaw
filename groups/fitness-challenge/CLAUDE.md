@@ -109,7 +109,7 @@ curl -s -X POST "$COOLIFY_API_URL/applications/public" \
 
 ## Participants
 
-- **Luis** — Height: 189cm, male. *Beginner* with fitness. Protein target: ~140g/day (1.6g × 87.4kg).
+- **Luis** — Height: 189cm, male. *Beginner* with fitness. Protein target: ~160g/day (1.8g × 87.4kg).
 - **Miley** — Height: 160cm, female, Asian. *Experienced athlete (~10 years training)*. Specific goal: learn spagat (front splits). Her InBody values are healthy for her body type — ignore "critically low" flags (app was misconfigured for male/tall profile). Protein target: ~80g/day (1.6g × 50.4kg).
 
 ## Challenge Details
@@ -118,12 +118,46 @@ curl -s -X POST "$COOLIFY_API_URL/applications/public" \
 - **Start**: 2026-03-14 (Saturday)
 - **End**: 2026-06-12 (Friday)
 
+## Competition Scoring
+
+Track and report these competitive metrics. Query the DB to calculate them whenever comparing participants or producing summaries.
+
+### Weekly Scoreboard Categories
+
+| Category | How to Score | Weight |
+|----------|-------------|--------|
+| **Workout consistency** | % of days with a logged workout (target: 5/7) | 25% |
+| **Nutrition logging** | % of days with all meals logged | 20% |
+| **Protein target hit rate** | % of days meeting protein goal (Luis: 160g, Miley: 80g) | 20% |
+| **Volume progression** | Week-over-week increase in total training volume (sets × reps × weight) | 15% |
+| **Wellness logging** | % of days with sleep/mood/energy logged | 10% |
+| **Bonus points** | PRs, new exercises tried, mini-challenge wins | 10% |
+
+### Weekly Winner Declaration
+
+Every Sunday summary must include:
+1. **Scoreboard table** — side-by-side scores per category
+2. **Weekly winner** — explicitly named, with the margin
+3. **Running season record** — total weekly wins (e.g., "Luis 2 — Miley 1")
+4. **Callout of the week** — the single most impressive or most disappointing moment from either participant
+
+### Mini-Challenges
+
+Propose a new mini-challenge each Monday. Examples:
+- "Protein Perfect Week" — who hits their protein target every single day
+- "Volume King/Queen" — who logs more total training volume
+- "Early Bird" — who logs their workout earlier in the day more often
+- "No Skip Week" — who maintains their planned workout schedule with zero misses
+
+Track results and maintain a running mini-challenge win tally.
+
 ## Scheduled Reminders
 
 Set up these recurring tasks via IPC `schedule_task`:
 
 1. **Morning wellness check-in** (daily ~8:00) — Ask about sleep quality, mood, energy level. Prompt to log if not already done.
 2. **Post-meal nutrition reminders** (daily ~13:30 and ~19:30) — Nudge to log lunch/dinner if nothing logged yet.
-3. **Protein intake check** (daily ~21:00) — Query the DB for today's total protein. Warn if below target (~1.6g/kg body weight).
-4. **Weekly progress summary** (Sunday ~19:00) — Body stats trends, workout consistency, nutrition averages, skill progress. Compare both participants.
+3. **Protein intake check** (daily ~21:00) — Query the DB for today's total protein for BOTH participants. Show side-by-side. Warn whoever is below target.
+4. **Weekly progress summary** (Sunday ~19:00) — **Lead with the scoreboard and weekly winner.** Then body stats trends, workout consistency, nutrition averages, skill progress. Always comparative.
+5. **Monday mini-challenge** (Monday ~8:30) — Propose the week's head-to-head mini-challenge. Reference last week's winner to fuel the rivalry.
 
