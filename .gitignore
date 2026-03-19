@@ -12,7 +12,6 @@ logs/
 # Groups - track all group configs (CLAUDE.md, SOUL.md, etc.)
 # Exclude runtime artifacts
 groups/*/logs/
-groups/*/conversations/
 groups/*/auth-state.json
 groups/*/*.png
 
