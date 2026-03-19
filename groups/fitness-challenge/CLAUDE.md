@@ -86,9 +86,14 @@ npx prisma generate
 You can store memories in .md files in the `memories/` directory. Use them to keep track of important information, insights, or reflections about the challenge.
 
 Important files:
-- `memories/saved_foods.md` — a log of food items and their nutritional info for easy reference when logging meals. Read this file, if a meal is logged without nutritional info
 - `memories/coolify-deployment.md` — Coolify API usage for deploying web apps, dashboards, and reports
 - `memories/pending-tasks.md` — a running list of tasks that need to be completed after session restart
+
+## Food Logging Rules
+
+1. *Photo with nutrition label* → read exact values, log to NutritionItem, save to `SavedFood` DB table
+2. *No photo, but food exists in SavedFood DB* → look up and multiply by weight
+3. *No photo, not in DB* → estimate macros, log to NutritionItem, do NOT save to SavedFood (estimates are not confirmed)
 
 
 ## Git Workflow
