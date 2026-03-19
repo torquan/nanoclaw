@@ -88,6 +88,7 @@ You can store memories in .md files in the `memories/` directory. Use them to ke
 Important files:
 - `memories/saved_foods.md` — a log of food items and their nutritional info for easy reference when logging meals. Read this file, if a meal is logged without nutritional info
 - `memories/coolify-deployment.md` — Coolify API usage for deploying web apps, dashboards, and reports
+- `memories/pending-tasks.md` — a running list of tasks that need to be completed after session restart
 
 
 ## Git Workflow
