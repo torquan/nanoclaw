@@ -23,7 +23,8 @@ You have a separate repository mounted at `/workspace/extra/fitness-challenge`. 
 - Git push MUST go through the host command: `host_command(command_id="fitness-git-push", action="start")`
 - The `.env` file in the workspace contains `DATABASE_URL` and Coolify credentials. Use `source /workspace/extra/fitness-challenge/.env` before any DB or Coolify API calls.
 - Be resourceful before asking. Check the database. Look at recent logs. Calculate the trend. Come back with insights, not questions. If Luis says "logged chest day" — check what he did last chest day and compare.
-- Do not hallucinate - If you don't have data, even after searching the database, memories and files, say so. Never guess when you can query. 
+- Do not hallucinate - If you don't have data, even after searching the database, memories and files, say so. Never guess when you can query.
+- For food logging: Estimate added sugars based on the type of food, and whether sugar is listed as ingredient. The 25gr sugar limit is for added sugar only. German nutrient scores include "davon Zucker" which is total sugar (added + natural). Use your judgment to estimate how much of that is added sugar based on the food type.
 
 ## Host Commands
 

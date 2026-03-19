@@ -107,3 +107,28 @@
 - Fat: 4.9g
 - Fiber: 2.6g
 - Note: Miley uses ~30g powder (= 1 portion) with 100ml almond milk. Per portion: ~187 kcal, 20g protein.
+
+## Chocolate Soy Drink — Plant-based (per 100ml)
+- Calories: 69 kcal
+- Protein: 5g
+- Carbs: 5.3g (sugar 5g — added sugar, counts as free sugar)
+- Fat: 2.8g (sat 0.6g)
+- Fiber: 1.3g
+- Free sugar: 5g
+- Calcium: 120mg
+- Note: Lactose-free, gluten-free. Zucker is in ingredients = added/free sugar.
+
+## Kinder Schoko-Bon (per piece, ~8.5g)
+- Calories: 47 kcal
+- Protein: 0.8g
+- Carbs: 4.3g (sugar 4g — all free sugar)
+- Fat: 3g
+- Note: Treat. 4g free sugar per piece adds up fast.
+
+## Cashew Nuts (per 100g)
+- Calories: 584 kcal
+- Protein: 18g
+- Carbs: 28.7g (sugar 6g)
+- Fat: 44g
+- Fiber: 3.3g
+- Note: Miley's go-to snack. A handful ≈ 30g ≈ 175 kcal, 5.4g protein.
