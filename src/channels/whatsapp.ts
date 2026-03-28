@@ -22,6 +22,11 @@ import {
 import { getLastGroupSync, setLastGroupSync, updateChatName } from '../db.js';
 import { isImageMessage, processImage } from '../image.js';
 import { logger } from '../logger.js';
+// Baileys expects pino's ILogger interface — wrap the built-in logger
+import type { ILogger } from '@whiskeysockets/baileys/lib/Utils/logger.js';
+const baileysLogger: ILogger = Object.assign(
+  { ...logger, trace: logger.debug, level: 'warn', child: () => baileysLogger },
+);
 import {
   Channel,
   MediaPayload,
@@ -78,10 +83,10 @@ export class WhatsAppChannel implements Channel {
       version,
       auth: {
         creds: state.creds,
-        keys: makeCacheableSignalKeyStore(state.keys, logger),
+        keys: makeCacheableSignalKeyStore(state.keys, baileysLogger),
       },
       printQRInTerminal: false,
-      logger,
+      logger: baileysLogger,
       browser: Browsers.macOS('Chrome'),
     });
 
