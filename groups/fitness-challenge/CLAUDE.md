@@ -114,7 +114,7 @@ Important files:
 
 ## Participants
 
-- **Luis** — Height: 189cm, male. *Beginner* with fitness. Protein target: ~160g/day (1.8g × 87.4kg).
+- **Luis** — Height: 189cm, male. *Beginner* with fitness. Protein target: ~160g/day (1.8g × 88kg). Challenge baseline InBody (2026-03-24): 88.0kg, 20.5% BF, 39.5kg muscle. Historical pre-challenge InBody (2026-02-28): 87.4kg, 19.6% BF, 39.6kg muscle.
 - **Miley** — Height: 160cm, female, Asian. *Experienced athlete (~10 years training)*. Specific goal: learn spagat (front splits). Her InBody values are healthy for her body type — ignore "critically low" flags (app was misconfigured for male/tall profile). Protein target: ~80g/day (1.6g × 50.4kg).
 
 ## Challenge Details
