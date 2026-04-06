@@ -18,7 +18,13 @@ import {
   GROUPS_DIR,
   STORE_DIR,
 } from '../config.js';
-import { getLastGroupSync, getLatestMessage, setLastGroupSync, storeReaction, updateChatName } from '../db.js';
+import {
+  getLastGroupSync,
+  getLatestMessage,
+  setLastGroupSync,
+  storeReaction,
+  updateChatName,
+} from '../db.js';
 import { isImageMessage, processImage } from '../image.js';
 import { logger } from '../logger.js';
 // Baileys expects pino's ILogger interface — wrap the built-in logger
@@ -36,6 +42,7 @@ import {
   OnChatMetadata,
   RegisteredGroup,
 } from '../types.js';
+import { ChannelOpts, registerChannel } from './registry.js';
 
 const GROUP_SYNC_INTERVAL_MS = 24 * 60 * 60 * 1000; // 24 hours
 
@@ -199,7 +206,10 @@ export class WhatsAppChannel implements Channel {
         // Only deliver full message for registered groups
         const groups = this.opts.registeredGroups();
         if (groups[chatJid]) {
-          const normalized = (await import('@whiskeysockets/baileys')).normalizeMessageContent?.(msg.message) || msg.message;
+          const normalized =
+            (await import('@whiskeysockets/baileys')).normalizeMessageContent?.(
+              msg.message,
+            ) || msg.message;
           let content =
             normalized?.conversation ||
             normalized?.extendedTextMessage?.text ||
@@ -266,7 +276,8 @@ export class WhatsAppChannel implements Channel {
           const chatJid = await this.translateJid(rawChatJid);
           const groups = this.opts.registeredGroups();
           if (!groups[chatJid]) continue;
-          const reactorJid = reaction.key?.participant || reaction.key?.remoteJid || '';
+          const reactorJid =
+            reaction.key?.participant || reaction.key?.remoteJid || '';
           const emoji = reaction.text || '';
           const timestamp = reaction.senderTimestampMs
             ? new Date(Number(reaction.senderTimestampMs)).toISOString()
@@ -372,8 +383,13 @@ export class WhatsAppChannel implements Channel {
 
   async sendReaction(
     chatJid: string,
-    messageKey: { id: string; remoteJid: string; fromMe?: boolean; participant?: string },
-    emoji: string
+    messageKey: {
+      id: string;
+      remoteJid: string;
+      fromMe?: boolean;
+      participant?: string;
+    },
+    emoji: string,
   ): Promise<void> {
     if (!this.connected) {
       logger.warn({ chatJid, emoji }, 'Cannot send reaction - not connected');
@@ -389,7 +405,7 @@ export class WhatsAppChannel implements Channel {
           messageId: messageKey.id?.slice(0, 10) + '...',
           emoji: emoji || '(removed)',
         },
-        emoji ? 'Reaction sent' : 'Reaction removed'
+        emoji ? 'Reaction sent' : 'Reaction removed',
       );
     } catch (err) {
       logger.error({ chatJid, emoji, err }, 'Failed to send reaction');
@@ -535,3 +551,5 @@ export class WhatsAppChannel implements Channel {
     }
   }
 }
+
+registerChannel('whatsapp', (opts: ChannelOpts) => new WhatsAppChannel(opts));
