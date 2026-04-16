@@ -23,7 +23,7 @@ import type {
 let _proto: any;
 async function getProto() {
   if (!_proto) {
-    _proto = (await import('@whiskeysockets/baileys') as any).proto;
+    _proto = ((await import('@whiskeysockets/baileys')) as any).proto;
   }
   return _proto;
 }
@@ -236,12 +236,15 @@ export class WhatsAppChannel implements Channel {
 
     this.sock.ev.on('creds.update', saveCreds);
 
-    (this.sock.ev as any).on('chats.phoneNumberShare', ({ lid, jid }: { lid: string; jid: string }) => {
-      const lidUser = lid?.split('@')[0].split(':')[0];
-      if (lidUser && jid) {
-        this.setLidPhoneMapping(lidUser, jid);
-      }
-    });
+    (this.sock.ev as any).on(
+      'chats.phoneNumberShare',
+      ({ lid, jid }: { lid: string; jid: string }) => {
+        const lidUser = lid?.split('@')[0].split(':')[0];
+        if (lidUser && jid) {
+          this.setLidPhoneMapping(lidUser, jid);
+        }
+      },
+    );
 
     this.sock.ev.on('messages.upsert', async ({ messages }) => {
       for (const msg of messages) {
@@ -256,10 +259,7 @@ export class WhatsAppChannel implements Channel {
         if (chatJid.endsWith('@lid') && (msg.key as any).senderPn) {
           const pn = (msg.key as any).senderPn as string;
           const phoneJid = pn.includes('@') ? pn : `${pn}@s.whatsapp.net`;
-          this.setLidPhoneMapping(
-            rawJid.split('@')[0].split(':')[0],
-            phoneJid,
-          );
+          this.setLidPhoneMapping(rawJid.split('@')[0].split(':')[0], phoneJid);
           chatJid = phoneJid;
           logger.info(
             { lidJid: rawJid, phoneJid },
@@ -301,7 +301,11 @@ export class WhatsAppChannel implements Channel {
               const buffer = await downloadMediaMessage(msg, 'buffer', {});
               const groupDir = path.join(GROUPS_DIR, groups[chatJid].folder);
               const caption = normalized?.imageMessage?.caption ?? '';
-              const result = await processImage(buffer as Buffer, groupDir, caption);
+              const result = await processImage(
+                buffer as Buffer,
+                groupDir,
+                caption,
+              );
               if (result) {
                 content = result.content;
               }
