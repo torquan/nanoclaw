@@ -72,7 +72,6 @@
 | 2 | Romanian Deadlift (RDL) | 3 × 10 | 50kg | Replaces conventional deadlift — better for hypertrophy |
 | 3 | Bulgarian Split Squat | 3 × 10/leg | 12kg DBs | Massive glute stretch |
 | 4 | Lying Leg Curl | 2 × 10 | 38.75kg | Hamstring isolation |
-| 5 | Cable Kickback | 2 × 15/leg | 10kg | Isolation finisher |
 | + | Stretching (splits work) | | | 10 min |
 
 ### Day B — Glute + Quad (~55 min)
