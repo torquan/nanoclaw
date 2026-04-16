@@ -5,11 +5,12 @@ type: project
 ---
 
 ## Pending
-- Chart.js stats page upgrade — plan exists but SVG→Chart.js migration not started yet
-- Luis Apr 3 wellness — still missing
-- Apr 4 food — nothing logged yet for Luis
-- Week 3 mini-challenge — never finalized after Iron Week rejected
-- Plank challenge — need to track Apr 3 and Apr 4 compliance
+- InBody scan recommended Apr 21–24 (before deciding on Luis TDEE adjustment from 2,916 → ~2,540)
+- Week 5 mini-challenge "Volume Rebound" — both need to beat Week 4 total volume
+- Apr 16 wellness + meals for both (not yet logged)
+
+## Completed (2026-04-16)
+- Plan file at ~/.claude/plans/kind-percolating-marble.md (Chart.js stats upgrade) was stale — work was already shipped in commits 201e51e, 7d38c6d, etc.
 
 ## Completed (2026-03-29)
 - Date-aware protein target fix (140g→160g on Mar 24) deployed ✓

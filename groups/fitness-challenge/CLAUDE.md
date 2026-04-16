@@ -88,6 +88,7 @@ You can store memories in .md files in the `memories/` directory. Use them to ke
 Important files:
 - `memories/coolify-deployment.md` — Coolify API usage for deploying web apps, dashboards, and reports
 - `memories/pending-tasks.md` — a running list of tasks that need to be completed after session restart
+- `memories/training-plans.md` — Luis's Push/Pull/Lower/Upper plan and Miley's Glute Growth plan with starting weights and progression
 
 ## Food Logging Rules
 
@@ -153,5 +154,10 @@ Propose a new mini-challenge each Monday. Examples:
 - "Volume King/Queen" — who logs more total training volume
 - "Early Bird" — who logs their workout earlier in the day more often
 - "No Skip Week" — who maintains their planned workout schedule with zero misses
+
+## Scheduled Task Rules
+
+- The **9pm protein check** is a *status update*, not a final verdict. People may still eat after 9pm. Report where they stand and what's needed to hit targets. Do NOT declare streaks broken, call it a "miss", or roast anyone — there's still time.
+- Only declare a protein target missed when the person explicitly says they're done eating for the day, or in the next morning's retrospective.
 
 Track results and maintain a running mini-challenge win tally.
