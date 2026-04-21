@@ -7,7 +7,7 @@ type: project
 ## Pending
 - InBody scan recommended Apr 21–24 (before deciding on Luis TDEE adjustment from 2,916 → ~2,540)
 - Week 5 mini-challenge "Volume Rebound" — both need to beat Week 4 total volume
-- Apr 16 wellness + meals for both (not yet logged)
+- **Week 6 (Apr 20–26): Repeat 1-minute plank challenge** — Luis requested on 2026-04-17. Both attempt max plank hold, compare to prior attempt.
 
 ## Completed (2026-04-16)
 - Plan file at ~/.claude/plans/kind-percolating-marble.md (Chart.js stats upgrade) was stale — work was already shipped in commits 201e51e, 7d38c6d, etc.
